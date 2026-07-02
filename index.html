@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>我的学习生活</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="主导航">
+        <div class="brand">
+          <span class="brand-mark">L</span>
+          <div>
+            <strong>学习生活</strong>
+            <span>Study & Life</span>
+          </div>
+        </div>
+        <nav class="nav-list">
+          <a href="#today" class="active">今天</a>
+          <a href="#records">记录</a>
+          <a href="#goals">目标</a>
+          <a href="#archive">归档</a>
+        </nav>
+      </aside>
+
+      <main>
+        <section class="top-panel" id="today">
+          <div class="intro">
+            <p class="eyebrow">个人成长日志</p>
+            <h1>把每天学到的东西，认真留下来。</h1>
+            <p class="subtitle">记录课程、阅读、项目、心情和生活片段，慢慢看见自己的节奏。</p>
+            <div class="quick-stats" aria-label="统计概览">
+              <div>
+                <strong id="totalCount">0</strong>
+                <span>条记录</span>
+              </div>
+              <div>
+                <strong id="studyHours">0</strong>
+                <span>小时学习</span>
+              </div>
+              <div>
+                <strong id="streakCount">0</strong>
+                <span>连续天数</span>
+              </div>
+            </div>
+          </div>
+          <img class="hero-art" src="assets/study-desk.svg" alt="书桌、笔记本和学习用品插画" />
+        </section>
+
+        <section class="workspace">
+          <form class="entry-form" id="entryForm">
+            <div class="section-title">
+              <p>今天写点什么</p>
+              <span id="todayLabel"></span>
+            </div>
+
+            <label>
+              标题
+              <input id="titleInput" name="title" type="text" placeholder="例如：高数复盘、读完一章书、完成作品集草稿" required />
+            </label>
+
+            <div class="form-grid">
+              <label>
+                日期
+                <input id="dateInput" name="date" type="date" required />
+              </label>
+              <label>
+                类型
+                <select id="typeInput" name="type">
+                  <option value="学习">学习</option>
+                  <option value="生活">生活</option>
+                  <option value="项目">项目</option>
+                  <option value="阅读">阅读</option>
+                  <option value="思考">思考</option>
+                </select>
+              </label>
+              <label>
+                学习时长
+                <input id="hoursInput" name="hours" type="number" min="0" max="24" step="0.5" value="1" />
+              </label>
+              <label>
+                心情
+                <select id="moodInput" name="mood">
+                  <option value="平静">平静</option>
+                  <option value="开心">开心</option>
+                  <option value="专注">专注</option>
+                  <option value="疲惫">疲惫</option>
+                  <option value="焦虑">焦虑</option>
+                </select>
+              </label>
+            </div>
+
+            <label>
+              内容
+              <textarea id="contentInput" name="content" rows="5" placeholder="写下今天做了什么、卡在哪里、下一步想怎么推进。" required></textarea>
+            </label>
+
+            <label>
+              标签
+              <input id="tagsInput" name="tags" type="text" placeholder="用逗号分隔，例如：英语, 编程, 健身" />
+            </label>
+
+            <div class="form-actions">
+              <button class="primary-btn" type="submit">保存记录</button>
+              <button class="ghost-btn" type="button" id="clearFormBtn">清空</button>
+            </div>
+          </form>
+
+          <section class="insights" aria-label="学习状态">
+            <div class="section-title">
+              <p>最近状态</p>
+              <span>自动统计</span>
+            </div>
+            <div class="goal-progress">
+              <div>
+                <span>本周学习</span>
+                <strong id="weekHours">0 / 12h</strong>
+              </div>
+              <progress id="weekProgress" max="12" value="0"></progress>
+            </div>
+            <div class="mood-board" id="moodBoard"></div>
+            <div class="heatmap" id="heatmap" aria-label="最近 28 天记录热力图"></div>
+          </section>
+        </section>
+
+        <section class="records-panel" id="records">
+          <div class="section-title wide">
+            <p>全部记录</p>
+            <div class="tools">
+              <input id="searchInput" type="search" placeholder="搜索标题、内容、标签" />
+              <select id="filterInput">
+                <option value="全部">全部</option>
+                <option value="学习">学习</option>
+                <option value="生活">生活</option>
+                <option value="项目">项目</option>
+                <option value="阅读">阅读</option>
+                <option value="思考">思考</option>
+              </select>
+            </div>
+          </div>
+          <div class="record-list" id="recordList"></div>
+        </section>
+
+        <section class="goals-panel" id="goals">
+          <div class="section-title wide">
+            <p>近期目标</p>
+            <button class="ghost-btn" type="button" id="resetDemoBtn">恢复示例</button>
+          </div>
+          <div class="goal-grid" id="goalGrid"></div>
+        </section>
+
+        <section class="archive-panel" id="archive">
+          <div class="section-title wide">
+            <p>数据归档</p>
+            <span>保存在当前浏览器</span>
+          </div>
+          <div class="archive-actions">
+            <button class="primary-btn" type="button" id="exportBtn">导出 JSON</button>
+            <label class="file-btn">
+              导入 JSON
+              <input id="importInput" type="file" accept="application/json" />
+            </label>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <template id="recordTemplate">
+      <article class="record-card">
+        <div class="record-top">
+          <span class="record-type"></span>
+          <time></time>
+        </div>
+        <h2></h2>
+        <p></p>
+        <div class="record-meta"></div>
+        <button class="delete-btn" type="button" aria-label="删除记录">删除</button>
+      </article>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
